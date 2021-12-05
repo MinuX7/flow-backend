@@ -1,0 +1,37 @@
+[{
+    "id": 1,
+    "name": "Schimbare buletin",
+    "description": "Aici puteti schimba buletinul de identitate",
+    "documents": [{
+      "id" : 1,
+      "name": "Cerere document",
+      "downloadable": true,
+      "fileId": 1,
+      "fileLocation" : "cerere.txt"
+      },
+      {
+          "id" : 1,
+          "name": "Carte de identitate",
+          "downloadable": false,
+          "fileId": 2
+      }
+    ]
+  },
+  {
+      "id": 2,
+      "name": "Creare pasaport",
+      "description": "Aici puteti crea un pasaport" ,
+      "documents": [{
+          "id" : 1,
+          "name": "Cerere pasaport",
+          "downloadable": true,
+          "fileId": 456,
+          "fileLocation" : "cerere_pasaport.txt"
+          },
+          {
+              "id" : 1,
+              "name": "Carte de identitate",
+              "downloadable": false
+          }
+        ] 
+  }]
