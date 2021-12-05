@@ -20,6 +20,7 @@ module.exports = async function(app) {
     app.post('/companies/:companyId/reservations',urlencodedParser, async function(req, res) {
         let reservation = req.body;
         let uuid = randomUUID();
+        console.info(reservation);
 
         const query = {
             text: 'INSERT INTO reservation_event VALUES($1, $2,$3,$4,$5,$6,$7,$8,$9, $10)',
