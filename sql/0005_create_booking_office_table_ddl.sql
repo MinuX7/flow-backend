@@ -20,3 +20,8 @@ create table booking_office_flow (
 	description varchar(200),
 	primary key (booking_office_id,flow_id)
 )
+
+alter table booking_office 
+   	add column slot_duration numeric not null default 10
+   	add column office_start_time time not null default '08:00:00',
+  	add column office_end_time time not null default '16:00:00';

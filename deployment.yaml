@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flow-backend-app
+  labels:
+    app: flow-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flow-backend
+  template:
+    metadata:
+      labels:
+        app: flow-backend
+    spec:
+      containers:
+        - name: academy
+          image: cosmind7/flow-backend:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flow-backend-service
+spec:
+  selector:
+    app: flow-backend
+  type: NodePort
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30500
+---

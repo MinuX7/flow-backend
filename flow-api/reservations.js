@@ -3,6 +3,7 @@ const express = require('express');
 const { Pool, Client } = require('pg');
 const { randomUUID } = require('crypto');
 var bodyParser = require('body-parser')
+const mailService= require('./mailservice');
 
 const pgConnectionPool = new Pool({
     user: 'cosmind',
@@ -37,6 +38,30 @@ module.exports = async function(app) {
         
     });
 
+    app.get('/companies/:companyId/reservations', async function(req, res) {
+        let companyId = req.params.companyId;
+        const query = {
+            text: "SELECT a.reservation_id, a.reservation_start_time, b.flow_name FROM reservation_event a, company_flow b " +
+                    "WHERE a.flow_id=b.flow_id AND a.company_id=b.company_id AND a.company_id=$1  AND reservation_start_time >= current_date " + 
+                    "ORDER BY a.reservation_time desc",
+            values: [companyId]
+            }
+            try {
+                result = await pgConnectionPool.query(query);  
+                let reserations = result.rows.map(row => {
+                    let reservation = {};
+                    reservation.reservationId= row.reservation_id;
+                    reservation.reservationStartTime = row.reservation_start_time;
+                    reservation.flowName = row.flow_name;
+                    return reservation;
+                });
+                res.json(reserations);
+            } catch (error) {
+                console.error(error);
+                res.status(500).send(error);
+            }  
+    });
+
     app.get('/companies/:companyId/bookingOffices/:bookingOffice/reservedSlots', async function(req, res) {
         let companyId = req.params.companyId;
         let bookingOfficeId=req.params.bookingOffice;
@@ -55,5 +80,13 @@ module.exports = async function(app) {
             return res.status(500).send(error);
         }
 
+    });
+
+    app.get('/testEmail', async function (req, res) {
+        console.info('Sending email');
+        let status = await mailService.sendTestMail();
+        console.log(status);
+        let message = status? 'Success': 'Error';
+        return res.send(message);
     });
 }

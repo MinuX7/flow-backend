@@ -20,6 +20,7 @@ module.exports = async function(app) {
     });
 
     app.get('/companies', async function(req, res){
+        console.info("Fetching companies");
         app.use(cors());
         const query = {
             text: 'SELECT * FROM company'
@@ -82,7 +83,6 @@ module.exports = async function(app) {
     app.get('/companies/:companyId/bookingOffice', async function(req, res) {
         var companyId = req.params.companyId;
         var flowId = req.query.flowId;
-        console.info(flowId)
         const query = {
             text: 'SELECT * FROM booking_office WHERE company_id=$1 AND id = (SELECT booking_office_id FROM booking_office_flow WHERE flow_id=$2)',
             values: [companyId, flowId]
@@ -94,13 +94,13 @@ module.exports = async function(app) {
             bookingOffice.id= row.id;
             bookingOffice.name = row.name;
             bookingOffice.description = row.description;
+            bookingOffice.slotDuration = row.slot_duration;
+            bookingOffice.officeStartTime = row.office_start_time;
+            bookingOffice.officeEndTime = row.office_end_time;
+    
             return bookingOffice;
         });
         return res.json(bookkingOffices);
     });
 
-    app.get('/companies/:companyId/reservations', function(req, res) {
-        let body = req.body;
-        console.log(body)
-    });
 }
